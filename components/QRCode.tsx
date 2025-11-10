@@ -1,7 +1,7 @@
 import React from "react";
 import QRCode from "react-qr-code";
 
-interface QRCodeComponentProps {
+export interface QRCodeComponentProps {
   url: string;
   size: number;
   fgColor?: string;
