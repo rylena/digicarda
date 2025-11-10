@@ -6,9 +6,16 @@ import QRCode from 'qrcode'
 interface QRCodeComponentProps {
   url: string
   size?: number
+  fgColor?: string // New prop for foreground color
+  bgColor?: string // New prop for background color
 }
 
-export default function QRCodeComponent({ url, size = 200 }: QRCodeComponentProps) {
+export default function QRCodeComponent({
+  url,
+  size = 200,
+  fgColor = '#000000', // Default to black
+  bgColor = '#FFFFFF', // Default to white
+}: QRCodeComponentProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
   useEffect(() => {
@@ -17,14 +24,14 @@ export default function QRCodeComponent({ url, size = 200 }: QRCodeComponentProp
         width: size,
         margin: 2,
         color: {
-          dark: '#000000',
-          light: '#FFFFFF',
+          dark: fgColor,
+          light: bgColor,
         },
       }).catch((err) => {
         console.error('Error generating QR code:', err)
       })
     }
-  }, [url, size])
+  }, [url, size, fgColor, bgColor]) // Add fgColor and bgColor to dependencies
 
   return (
     <div className="flex flex-col items-center gap-2">
