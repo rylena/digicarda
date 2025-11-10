@@ -10,6 +10,9 @@ interface QRCodeComponentProps {
   bgColor?: string // New prop for background color
 }
 
+// TEMPORARY BREAKING CHANGE TO FORCE CACHE BUST - REMOVE LATER
+const VERCEL_CACHE_BUST = "THIS_SHOULD_BREAK_BUILD"
+
 export default function QRCodeComponent({
   url,
   size = 200,
