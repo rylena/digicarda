@@ -243,8 +243,8 @@ export default function CardDisplay({ card, baseUrl }: CardDisplayProps) {
           <QRCodeComponent 
             url={cardUrl} 
             size={150} 
-            fgColor={card.dark_mode ? '#ffffff' : '#000000'} // Adjust QR code color for dark mode
-            bgColor={card.dark_mode ? '#1f2937' : '#ffffff'} // Adjust QR code background for dark mode
+            // fgColor={card.dark_mode ? '#ffffff' : '#000000'} // Temporarily remove fgColor
+            // bgColor={card.dark_mode ? '#1f2937' : '#ffffff'} // Temporarily remove bgColor
           />
         </div>
       </div>
