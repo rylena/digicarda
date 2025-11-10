@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import { Card } from '@/types/database'
-import QRCode from 'react-qr-code' // Import react-qr-code directly
+import QRCodeComponent from './QRCode' // Re-import custom QRCodeComponent
 import { useState } from 'react'
 
 interface CardDisplayProps {
@@ -240,8 +240,8 @@ export default function CardDisplay({ card, baseUrl }: CardDisplayProps) {
 
         {/* QR Code */}
         <div className={`flex justify-center mt-6 pt-6 border-t ${card.dark_mode ? 'border-gray-700' : 'border-gray-200'}`}>
-          <QRCode 
-            value={cardUrl} 
+          <QRCodeComponent 
+            url={cardUrl} 
             size={150} 
             fgColor={card.dark_mode ? '#ffffff' : '#000000'} // Adjust QR code color for dark mode
             bgColor={card.dark_mode ? '#1f2937' : '#ffffff'} // Adjust QR code background for dark mode
