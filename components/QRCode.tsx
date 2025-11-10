@@ -19,6 +19,7 @@ export default function QRCodeComponent({
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
   useEffect(() => {
+    // Ensure fgColor and bgColor are used correctly
     if (canvasRef.current) {
       QRCode.toCanvas(canvasRef.current, url, {
         width: size,
