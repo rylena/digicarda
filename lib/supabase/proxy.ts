@@ -1,7 +1,7 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
-export async function updateSession(request: NextRequest) {
+export async function proxySession(request: NextRequest) { // Rename function to proxySession
   let supabaseResponse = NextResponse.next({
     request,
   })
@@ -31,14 +31,12 @@ export async function updateSession(request: NextRequest) {
   // supabase.auth.getUser(). A simple mistake could make it very hard to debug
   // issues with users being randomly logged out.
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  const { data: { user }, } = await supabase.auth.getUser()
 
   // Allow public routes
   const publicRoutes = ['/login', '/signup', '/about', '/']
   const isPublicRoute = publicRoutes.includes(request.nextUrl.pathname)
-  const isPublicProfile = /^\/[^\/]+$/.test(request.nextUrl.pathname) && request.nextUrl.pathname !== '/'
+  const isPublicProfile = /^\/[^/]+$/.test(request.nextUrl.pathname) && request.nextUrl.pathname !== '/'
 
   if (
     !user &&
@@ -46,9 +44,8 @@ export async function updateSession(request: NextRequest) {
     !isPublicProfile &&
     !request.nextUrl.pathname.startsWith('/api')
   ) {
-    // no user, potentially respond by redirecting the user to the login page
     const url = request.nextUrl.clone()
-    url.pathname = '/login'
+    url.pathname = '/' // Redirect to home page (or login page if preferred)
     return NextResponse.redirect(url)
   }
 
