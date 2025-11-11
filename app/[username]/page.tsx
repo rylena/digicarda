@@ -51,3 +51,19 @@ export async function generateMetadata({ params }: PageProps) {
   }
 }
 
+export async function generateStaticParams() {
+  const supabase = await createClient()
+  const { data: cards, error } = await supabase.from('cards').select('username')
+
+  if (error) {
+    console.error('Error fetching usernames for static params:', error)
+    return []
+  }
+
+  return cards.map((card) => ({
+    username: card.username,
+  }))
+}
+
+export const dynamic = 'force-static'
+
