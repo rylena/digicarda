@@ -135,7 +135,10 @@ export default function DashboardContent({ user, card: initialCard }: DashboardC
         // Update existing card
         const { data, error } = await supabase
           .from('cards')
-          .update(formData)
+          .update({
+            ...formData,
+            profile_picture_url: formData.profile_picture_url,
+          })
           .eq('user_id', user.id)
           .select()
           .single()

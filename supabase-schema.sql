@@ -39,11 +39,11 @@ create policy "Users can view all profiles"
 
 create policy "Users can update own profile"
   on profiles for update
-  using (auth.uid() = id);
+  using ((select auth.uid()) = id);
 
 create policy "Users can insert own profile"
   on profiles for insert
-  with check (auth.uid() = id);
+  with check ((select auth.uid()) = id);
 
 -- Cards policies
 create policy "Anyone can view cards"
