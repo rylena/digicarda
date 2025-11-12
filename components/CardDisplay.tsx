@@ -12,6 +12,10 @@ interface CardDisplayProps {
 
 export default function CardDisplay({ card, baseUrl }: CardDisplayProps) {
   const [showContact, setShowContact] = useState(false)
+  const [showEmailModal, setShowEmailModal] = useState(false)
+  const [showPhoneModal, setShowPhoneModal] = useState(false)
+  const [selectedContactType, setSelectedContactType] = useState<'email' | 'phone' | null>(null)
+  const [selectedContactList, setSelectedContactList] = useState<string[]>([])
   const cardUrl = `${baseUrl}/${card.username}`
 
   const getBackgroundClasses = () => {
@@ -72,8 +76,12 @@ export default function CardDisplay({ card, baseUrl }: CardDisplayProps) {
       <div className="p-6">
         <div className="flex flex-wrap justify-center gap-4 mb-6">
           {card.emails && card.emails.length > 0 && (
-            <a
-              href={`mailto:${card.emails[0]}`}
+            <button
+              onClick={() => {
+                setSelectedContactType('email')
+                setSelectedContactList(card.emails)
+                setShowEmailModal(true)
+              }}
               className={`flex items-center justify-center w-12 h-12 rounded-full ${card.dark_mode ? 'bg-gray-700 text-gray-100 hover:bg-gray-600' : 'bg-red-100 text-red-600 hover:bg-red-200'} transition-colors`}
               title={`Email: ${card.emails[0]}`}
             >
@@ -81,19 +89,23 @@ export default function CardDisplay({ card, baseUrl }: CardDisplayProps) {
                 <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
                 <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
               </svg>
-            </a>
+            </button>
           )}
 
           {card.phone_numbers && card.phone_numbers.length > 0 && (
-            <a
-              href={`tel:${card.phone_numbers[0]}`}
+            <button
+              onClick={() => {
+                setSelectedContactType('phone')
+                setSelectedContactList(card.phone_numbers)
+                setShowPhoneModal(true)
+              }}
               className={`flex items-center justify-center w-12 h-12 rounded-full ${card.dark_mode ? 'bg-gray-700 text-gray-100 hover:bg-gray-600' : 'bg-green-100 text-green-600 hover:bg-green-200'} transition-colors`}
               title={`Phone: ${card.phone_numbers[0]}`}
             >
               <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
               </svg>
-            </a>
+            </button>
           )}
 
           {card.whatsapp && (
@@ -258,6 +270,56 @@ export default function CardDisplay({ card, baseUrl }: CardDisplayProps) {
           Create your SterlingCards.
         </a>
       </div>
+
+      {/* Email/Phone Modal */}
+      {(showEmailModal || showPhoneModal) && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 animate-fade-in"
+          onClick={() => {
+            setShowEmailModal(false)
+            setShowPhoneModal(false)
+            setSelectedContactType(null)
+            setSelectedContactList([])
+          }}
+        >
+          <div
+            className={`relative p-6 rounded-lg shadow-xl w-full max-w-sm m-4 ${card.dark_mode ? 'bg-gray-800 text-gray-100' : 'bg-white text-gray-900'}`}
+            onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside modal
+          >
+            <h3 className="text-xl font-bold mb-4">
+              {selectedContactType === 'email' ? 'Choose Email' : 'Choose Phone Number'}
+            </h3>
+            <div className="space-y-3">
+              {selectedContactList.map((contact, index) => (
+                <a
+                  key={index}
+                  href={selectedContactType === 'email' ? `mailto:${contact}` : `tel:${contact}`}
+                  className={`block py-2 px-3 rounded-lg text-center ${card.dark_mode ? 'bg-gray-700 hover:bg-gray-600 text-gray-100' : 'bg-blue-100 hover:bg-blue-200 text-blue-700'} transition-colors`}
+                  onClick={() => {
+                    setShowEmailModal(false)
+                    setShowPhoneModal(false)
+                    setSelectedContactType(null)
+                    setSelectedContactList([])
+                  }}
+                >
+                  {contact}
+                </a>
+              ))}
+            </div>
+            <button
+              onClick={() => {
+                setShowEmailModal(false)
+                setShowPhoneModal(false)
+                setSelectedContactType(null)
+                setSelectedContactList([])
+              }}
+              className={`mt-6 w-full py-2 ${card.dark_mode ? 'bg-gray-700 hover:bg-gray-600 text-gray-100' : 'bg-gray-200 hover:bg-gray-300 text-gray-700'} rounded-lg transition-colors`}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
